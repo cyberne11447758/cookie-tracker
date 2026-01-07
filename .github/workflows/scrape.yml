@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repo with credentials so we can push back
+      # Checkout repo with credentials
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
@@ -30,11 +30,11 @@ jobs:
       - name: Run scraper
         run: node scraper/scrape.js
 
-      # Optional: show output for debugging
+      # Optional: log scraped data for debugging
       - name: Show scraped data
         run: cat docs/data/results.json
 
-      # Commit and push only if data changed
+      # Commit and push only if data changed using PAT
       - name: Commit and push changes
         run: |
           git add docs/data/results.json
@@ -42,5 +42,5 @@ jobs:
             git config user.name "cookie-tracker-bot"
             git config user.email "bot@users.noreply.github.com"
             git commit -m "Update cookie tracker data via GitHub Actions"
-            git push
+            git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} HEAD:main
           )
