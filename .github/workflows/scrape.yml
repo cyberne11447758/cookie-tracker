@@ -10,12 +10,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1️⃣ Checkout repository
+      # 1️⃣ Checkout repo
       - uses: actions/checkout@v4
         with:
-          persist-credentials: true
+          persist-credentials: false # important: we will use PAT manually
 
-      # 2️⃣ Verify GH_TOKEN exists
+      # 2️⃣ Verify GH_TOKEN secret exists
       - name: Verify GH_TOKEN secret
         run: |
           if [ -z "${{ secrets.GH_TOKEN }}" ]; then
@@ -26,27 +26,18 @@ jobs:
           fi
         shell: bash
 
-      # 3️⃣ Configure Git to use PAT
-      - name: Configure Git
-        run: |
-          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
-          git config user.name "cookie-tracker-bot"
-          git config user.email "bot@users.noreply.github.com"
-          echo "✅ Git configured with PAT and author info"
-        shell: bash
-
-      # 4️⃣ Setup Node.js
+      # 3️⃣ Setup Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # 5️⃣ Install dependencies
+      # 4️⃣ Install dependencies including Playwright
       - name: Install dependencies
         run: |
           npm install
           npx playwright install --with-deps
 
-      # 6️⃣ Run scraper
+      # 5️⃣ Run scraper
       - name: Run scraper
         run: node scraper/scrape.js
 
@@ -54,12 +45,19 @@ jobs:
       - name: Show scraped data
         run: cat docs/data/results.json
 
-      # 7️⃣ Commit & push changes
+      # 6️⃣ Commit & push JSON using PAT
       - name: Commit and push JSON
         run: |
+          # Configure Git author
+          git config user.name "cookie-tracker-bot"
+          git config user.email "bot@users.noreply.github.com"
+
+          # Stage JSON file
           git add docs/data/results.json
-          git diff --cached --quiet || (
-            git commit -m "Update cookie tracker data via GitHub Actions"
-            git push origin HEAD:main
-          )
+
+          # Commit if changes exist
+          git diff --cached --quiet || git commit -m "Update cookie tracker data via GitHub Actions"
+
+          # Push using the PAT explicitly in the URL
+          git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} HEAD:main
         shell: bash
