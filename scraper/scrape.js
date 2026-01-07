@@ -5,6 +5,14 @@ import fs from "fs";
 const POST_URL =
   "https://www.erininthemorning.com/p/2026-trans-girl-scouts-to-order-cookies";
 
+// Helper to capitalize names nicely
+function capitalizeName(name) {
+  return name
+    .split(" ")
+    .map(w => w[0].toUpperCase() + w.slice(1))
+    .join(" ");
+}
+
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -15,13 +23,28 @@ const POST_URL =
   // Find all Digital Cookie scout links
   const scouts = await page.$$eval("a", (links) =>
     links
-      .map((a) => ({
-        name: a.textContent.trim(),
-        url: a.href,
-      }))
-      .filter(
-        (l) => l.url.includes("digitalcookie") && l.name.length > 0
-      )
+      .map((a) => {
+        const text = a.textContent.trim();
+        const href = a.href;
+
+        // Only include links with digitalcookie
+        if (!href.includes("digitalcookie")) return null;
+
+        // Extract scout name from link text
+        // Example: "Amelia Aimee's Digital Cookie® Store" => "Amelia Aimee"
+        const match = text.match(/^(.+?)('|’)?s\s+Digital Cookie/i);
+        const name = match ? match[1] : text;
+
+        return {
+          name: name
+            .replace(/[^a-zA-Z\s]/g, "") // remove numbers/special chars if desired
+            .split(" ")
+            .map(w => w[0].toUpperCase() + w.slice(1))
+            .join(" "),
+          url: href,
+        };
+      })
+      .filter(Boolean)
   );
 
   const results = [];
@@ -76,4 +99,3 @@ const POST_URL =
 
   console.log(`Scraped ${results.length} scouts. Data saved to ${outputPath}`);
 })();
-
