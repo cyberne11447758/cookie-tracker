@@ -14,7 +14,7 @@
   }
 
   header {
-    background: linear-gradient(135deg, #55a6e0, #e066a8); /* darker blue → medium pink */
+    background: linear-gradient(135deg, #004080, #d6336c);
     color: white;
     text-align: center;
     padding: 3rem 1rem;
@@ -78,6 +78,7 @@
   }
   .bubble-link:hover { background: rgba(0,0,0,0.35); transform: translateY(-1px); }
 
+  /* Goal Met */
   .goal-met {
     background: #999 !important;
     filter: grayscale(60%);
@@ -146,27 +147,28 @@ fetch("data/results.json")
       } else {
         const ratio = (scout.remaining || 0) / (maxRemaining || 1);
 
-        // Define trans-flag shades for urgency
-        const darkBlue = [0, 120, 200];     // urgent / most left
-        const mediumPink = [230, 100, 150]; // medium
-        const white = [255,255,255];        // least left
-
-        let color;
+        // Blue zone: ratio > 0.66
+        // Pink zone: 0.33 < ratio <= 0.66
+        // White zone: ratio <= 0.33
+        let color, textColor = "white";
         if (ratio > 0.66) {
-          // Dark blue zone
+          // Blue: dark to light
           const t = (ratio-0.66)/0.34;
-          color = darkBlue.map((c,i) => Math.round(c*(1-t) + mediumPink[i]*t));
+          const darkBlue = [0,70,140], lightBlue=[102,178,255];
+          color = darkBlue.map((c,i) => Math.round(c*(1-t)+lightBlue[i]*t));
         } else if (ratio > 0.33) {
-          // Pink zone
+          // Pink: dark to light
           const t = (ratio-0.33)/0.33;
-          color = mediumPink.map((c,i) => Math.round(c*(1-t) + white[i]*t));
+          const darkPink = [178,50,102], lightPink=[255,153,204];
+          color = darkPink.map((c,i) => Math.round(c*(1-t)+lightPink[i]*t));
         } else {
-          // White zone
-          const t = ratio/0.33;
-          color = white.map((c,i) => Math.round(c*(1-t) + mediumPink[i]*t));
+          // White: keep white background, black text
+          color = [255,255,255];
+          textColor = "#000";
         }
 
         bubble.style.background = `rgb(${color.join(',')})`;
+        bubble.style.color = textColor;
       }
 
       bubble.innerHTML = `
@@ -186,7 +188,6 @@ fetch("data/results.json")
 
 </body>
 </html>
-
 
 </body>
 </html>
