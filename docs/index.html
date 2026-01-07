@@ -5,107 +5,107 @@
 <title>2026 Trans Girl Scouts To Order Cookies From!</title>
 <meta name="description" content="This year, consider ordering your Girl Scout cookies from a trans girl scout to make their day!">
 <style>
-  body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background: #f0f2f5;
-    margin: 0;
-    padding: 0;
-    color: #333;
-  }
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  background: #f0f2f5;
+  margin: 0;
+  padding: 0;
+  color: #333;
+}
 
-  header {
-    background: linear-gradient(135deg, #004080, #d6336c);
-    color: white;
-    text-align: center;
-    padding: 3rem 1rem;
-    border-bottom-left-radius: 30px;
-    border-bottom-right-radius: 30px;
-    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-  }
+header {
+  background: linear-gradient(135deg, #004080, #d6336c);
+  color: white;
+  text-align: center;
+  padding: 3rem 1rem;
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
 
-  header h1 { margin: 0; font-size: 2rem; }
-  header p { margin-top: 0.5rem; font-size: 1.2rem; font-weight: 500; }
+header h1 { margin: 0; font-size: 2rem; }
+header p { margin-top: 0.5rem; font-size: 1.2rem; font-weight: 500; }
 
-  .updated {
-    text-align: center;
-    font-size: 0.9rem;
-    color: #666;
-    margin: 1rem 0 2rem 0;
-  }
+.updated {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  margin: 1rem 0 2rem 0;
+}
 
-  .scout-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
-    gap: 1.5rem;
-    padding: 0 2rem;
-    margin-bottom: 3rem;
-  }
+.scout-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 1.5rem;
+  padding: 0 2rem;
+  margin-bottom: 3rem;
+}
 
-  .scout-bubble {
-    position: relative;
-    border-radius: 50%;
-    width: 180px;
-    height: 180px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    color: white;
-    font-weight: 700;
-    text-align: center;
-    padding: 1rem;
-    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-    transition: transform 0.2s, box-shadow 0.2s;
-    overflow: hidden;
-  }
-  .scout-bubble:hover {
-    transform: translateY(-4px);
-    box-shadow: 0 10px 22px rgba(0,0,0,0.12);
-  }
+.scout-bubble {
+  position: relative;
+  border-radius: 50%;
+  width: 180px;
+  height: 180px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  font-weight: 700;
+  text-align: center;
+  padding: 1rem;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+  transition: transform 0.2s, box-shadow 0.2s;
+  overflow: hidden;
+}
+.scout-bubble:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+}
 
-  .bubble-name { font-size: 1rem; margin-bottom: 0.5rem; }
-  .bubble-status { font-size: 0.9rem; font-weight: 600; }
-  .bubble-link {
-    margin-top: 0.5rem;
-    display: inline-block;
-    text-decoration: none;
-    color: white;
-    background: rgba(0,0,0,0.2);
-    padding: 0.3rem 0.6rem;
-    border-radius: 8px;
-    font-weight: 600;
-    transition: background 0.2s, transform 0.2s;
-  }
-  .bubble-link:hover { background: rgba(0,0,0,0.35); transform: translateY(-1px); }
+.bubble-name { font-size: 1rem; margin-bottom: 0.5rem; }
+.bubble-status { font-size: 0.9rem; font-weight: 600; }
+.bubble-link {
+  margin-top: 0.5rem;
+  display: inline-block;
+  text-decoration: none;
+  color: white;
+  background: rgba(0,0,0,0.2);
+  padding: 0.3rem 0.6rem;
+  border-radius: 8px;
+  font-weight: 600;
+  transition: background 0.2s, transform 0.2s;
+}
+.bubble-link:hover { background: rgba(0,0,0,0.35); transform: translateY(-1px); }
 
-  /* Goal Met */
-  .goal-met {
-    background: #999 !important;
-    filter: grayscale(60%);
-    opacity: 0.8;
-  }
-  .goal-met .bubble-link { 
-    text-decoration: line-through;
-    opacity: 0.5;
-    pointer-events: auto;
-  }
+/* Goal Met */
+.goal-met {
+  background: #999 !important;
+  filter: grayscale(60%);
+  opacity: 0.8;
+}
+.goal-met .bubble-link { 
+  text-decoration: line-through;
+  opacity: 0.5;
+  pointer-events: auto;
+}
 
-  footer {
-    text-align: center;
-    font-size: 0.9rem;
-    color: #666;
-    padding: 2rem 1rem;
-    border-top: 1px solid #ddd;
-    background: #fafafa;
-  }
-  footer a { color: #d6336c; text-decoration: none; font-weight: 500; }
-  footer a:hover { text-decoration: underline; }
+footer {
+  text-align: center;
+  font-size: 0.9rem;
+  color: #666;
+  padding: 2rem 1rem;
+  border-top: 1px solid #ddd;
+  background: #fafafa;
+}
+footer a { color: #d6336c; text-decoration: none; font-weight: 500; }
+footer a:hover { text-decoration: underline; }
 
-  @media(max-width: 500px){
-    header { padding: 2rem 1rem; }
-    .scout-grid { padding: 0 1rem; }
-    .scout-bubble { width: 140px; height: 140px; }
-  }
+@media(max-width: 500px){
+  header { padding: 2rem 1rem; }
+  .scout-grid { padding: 0 1rem; }
+  .scout-bubble { width: 140px; height: 140px; }
+}
 </style>
 </head>
 <body>
@@ -126,69 +126,63 @@
 
 <script>
 fetch("data/results.json")
-  .then(r => r.json())
-  .then(data => {
-    const rows = document.getElementById("rows");
-    const maxRemaining = Math.max(...data.map(d => d.remaining || 0));
+.then(r => r.json())
+.then(data => {
+  const rows = document.getElementById("rows");
 
-    // Sort: Still Selling first (highest remaining first), then Goal Met
-    data.sort((a, b) => {
-      if (a.status !== b.status)
-        return a.status === "Still Selling" ? -1 : 1;
-      return (b.remaining || 0) - (a.remaining || 0);
-    });
+  // Determine global min/max
+  const maxRemaining = Math.max(...data.map(d => d.remaining || 0));
+  const minRemaining = Math.min(...data.map(d => d.remaining || 0));
 
-    for (const scout of data) {
-      const bubble = document.createElement("div");
-      bubble.className = "scout-bubble";
+  // Sort: Still Selling first, then Goal Met
+  data.sort((a,b)=>{
+    if(a.status!==b.status) return a.status==="Still Selling" ? -1 : 1;
+    return (b.remaining||0)-(a.remaining||0);
+  });
 
-      if (scout.status === "Goal Met") {
-        bubble.classList.add("goal-met");
-      } else {
-        const ratio = (scout.remaining || 0) / (maxRemaining || 1);
+  for(const scout of data){
+    const bubble = document.createElement("div");
+    bubble.className="scout-bubble";
 
-        // Blue zone: ratio > 0.66
-        // Pink zone: 0.33 < ratio <= 0.66
-        // White zone: ratio <= 0.33
-        let color, textColor = "white";
-        if (ratio > 0.66) {
-          // Blue: dark to light
-          const t = (ratio-0.66)/0.34;
-          const darkBlue = [0,70,140], lightBlue=[102,178,255];
-          color = darkBlue.map((c,i) => Math.round(c*(1-t)+lightBlue[i]*t));
-        } else if (ratio > 0.33) {
-          // Pink: dark to light
-          const t = (ratio-0.33)/0.33;
-          const darkPink = [178,50,102], lightPink=[255,153,204];
-          color = darkPink.map((c,i) => Math.round(c*(1-t)+lightPink[i]*t));
-        } else {
-          // White: keep white background, black text
-          color = [255,255,255];
-          textColor = "#000";
-        }
+    if(scout.status==="Goal Met"){
+      bubble.classList.add("goal-met");
+    } else {
+      const ratio = (scout.remaining || 0)/ (maxRemaining || 1);
+      let color, textColor="white";
 
-        bubble.style.background = `rgb(${color.join(',')})`;
-        bubble.style.color = textColor;
+      if(ratio > 0.66){
+        // Blue zone, darker = more cookies
+        const t = (ratio-0.66)/0.34;
+        const darkBlue=[0,70,140], lightBlue=[102,178,255];
+        color = darkBlue.map((c,i)=>Math.round(c*(1-t)+lightBlue[i]*t));
+      } else if(ratio>0.33){
+        // Pink zone, darker = more cookies
+        const t = (ratio-0.33)/0.33;
+        const darkPink=[178,50,102], lightPink=[255,153,204];
+        color = darkPink.map((c,i)=>Math.round(c*(1-t)+lightPink[i]*t));
+      } else{
+        // White zone
+        color=[255,255,255];
+        textColor="#000";
       }
 
-      bubble.innerHTML = `
-        <div class="bubble-name">${scout.name}</div>
-        <div class="bubble-status">${scout.status} ${scout.remaining ? `(${scout.remaining} left)` : ""}</div>
-        <a class="bubble-link" href="${scout.url}" target="_blank">Buy Cookies</a>
-      `;
-
-      rows.appendChild(bubble);
+      bubble.style.background=`rgb(${color.join(',')})`;
+      bubble.style.color=textColor;
     }
 
-    document.getElementById("updated").textContent =
-      "Last updated: " + new Date(data[0]?.lastChecked).toLocaleString();
-  })
-  .catch(err => console.error("Failed to load JSON:", err));
+    bubble.innerHTML=`
+      <div class="bubble-name">${scout.name}</div>
+      <div class="bubble-status">${scout.status} ${scout.remaining ? `(${scout.remaining} left)` : ""}</div>
+      <a class="bubble-link" href="${scout.url}" target="_blank">Buy Cookies</a>
+    `;
+    rows.appendChild(bubble);
+  }
+
+  document.getElementById("updated").textContent=
+    "Last updated: "+new Date(data[0]?.lastChecked).toLocaleString();
+})
+.catch(err=>console.error("Failed to load JSON:",err));
 </script>
 
 </body>
 </html>
-
-</body>
-</html>
-
