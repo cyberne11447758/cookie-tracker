@@ -14,7 +14,7 @@
   }
 
   header {
-    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    background: linear-gradient(135deg, #55cdfc, #f7a8b8); /* light blue → pink */
     color: white;
     text-align: center;
     padding: 3rem 1rem;
@@ -33,7 +33,6 @@
     margin: 1rem 0 2rem 0;
   }
 
-  /* ===== Bubble Grid ===== */
   .scout-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -57,6 +56,7 @@
     padding: 1rem;
     box-shadow: 0 6px 18px rgba(0,0,0,0.08);
     transition: transform 0.2s, box-shadow 0.2s;
+    overflow: hidden;
   }
   .scout-bubble:hover {
     transform: translateY(-4px);
@@ -78,7 +78,6 @@
   }
   .bubble-link:hover { background: rgba(0,0,0,0.35); transform: translateY(-1px); }
 
-  /* Goal Met Overlay */
   .goal-met {
     filter: grayscale(50%);
     opacity: 0.8;
@@ -86,7 +85,7 @@
   .goal-met .bubble-link { 
     text-decoration: line-through;
     opacity: 0.5;
-    pointer-events: auto; /* still clickable but visually de-emphasized */
+    pointer-events: auto;
   }
 
   footer {
@@ -128,8 +127,6 @@ fetch("data/results.json")
   .then(r => r.json())
   .then(data => {
     const rows = document.getElementById("rows");
-
-    // Find highest remaining for gradient scaling
     const maxRemaining = Math.max(...data.map(d => d.remaining || 0));
 
     // Sort: Still Selling first (highest remaining first), then Goal Met
@@ -143,18 +140,31 @@ fetch("data/results.json")
       const bubble = document.createElement("div");
       bubble.className = "scout-bubble";
 
-      // Set gradient or solid green
       if (scout.status === "Goal Met") {
         bubble.style.background = "#198754"; // solid green
         bubble.classList.add("goal-met");
       } else {
-        // Gradient: red -> yellow -> green based on remaining
         const ratio = (scout.remaining || 0) / (maxRemaining || 1);
-        // Convert ratio to color (red = most cookies left, yellow middle, green = low)
-        const red = Math.floor(220 * ratio + 35*(1-ratio)); // more remaining → redder
-        const green = Math.floor(120 * (1 - ratio) + 50*ratio); // less remaining → greener
-        const blue = 50;
-        bubble.style.background = `rgb(${red}, ${green}, ${blue})`;
+        // Trans flag inspired: light pink → white → light blue
+        const pink = [245, 169, 184]; // #f5a9b8
+        const white = [255,255,255];
+        const blue = [85,205,252]; // #55cdfc
+
+        let color;
+        if (ratio > 0.66) {
+          // Mostly pink
+          const t = (ratio-0.66)/0.34;
+          color = pink.map((c,i) => Math.round(c*(1-t) + white[i]*t));
+        } else if (ratio > 0.33) {
+          // White
+          const t = (ratio-0.33)/0.33;
+          color = white.map((c,i) => Math.round(c*(1-t) + blue[i]*t));
+        } else {
+          // Mostly blue
+          const t = ratio/0.33;
+          color = blue.map((c,i) => Math.round(c*(1-t) + white[i]*t));
+        }
+        bubble.style.background = `rgb(${color.join(',')})`;
       }
 
       bubble.innerHTML = `
@@ -174,3 +184,4 @@ fetch("data/results.json")
 
 </body>
 </html>
+
