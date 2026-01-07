@@ -24,25 +24,41 @@ const POST_URL =
     const scoutPage = await browser.newPage();
     await scoutPage.goto(url, { waitUntil: "networkidle" });
 
-    // Get scout name from h1.title
-    let name = await scoutPage.$eval("h1.title", el => el.textContent.trim()).catch(() => null);
+    let name = null;
 
-    if (name) {
-      // Extract just the part before "'s Digital Cookie"
-      const match = name.match(/^(.+?)('|’)?s\s+Digital Cookie/i);
-      name = match ? match[1] : name;
+    // 1️⃣ Try h1.title (normal store)
+    name = await scoutPage.$eval("h1.title", el => el.textContent.trim()).catch(() => null);
 
-      // Capitalize each word
-      name = name
-        .split(" ")
-        .filter(Boolean)
-        .map(w => w[0].toUpperCase() + w.slice(1))
-        .join(" ");
-    } else {
-      name = "Unknown Scout";
+    // 2️⃣ If not, try general h1 patterns
+    if (!name) {
+      const h1Text = await scoutPage.$eval("h1", el => el.textContent.trim()).catch(() => null);
+      if (h1Text) {
+        // Match patterns like:
+        // "Welcome to Sam's Digital Cookie® Site" → Sam
+        // "Support Jay!" → Jay
+        let match = h1Text.match(/Welcome to (.+?)('s)? Digital Cookie/i);
+        if (!match) match = h1Text.match(/Support (.+)!/i);
+        name = match ? match[1].trim() : h1Text;
+      }
     }
 
-    // Get number of packages left
+    // 3️⃣ Check if store is closed
+    if (!name) {
+      const mainText = await scoutPage.$eval("p.main-text", el => el.textContent.trim()).catch(() => "");
+      if (mainText.includes("My store is closed")) name = "Closed Store";
+    }
+
+    // 4️⃣ Fallback
+    if (!name) name = "Unknown Scout";
+
+    // Capitalize each word
+    name = name
+      .split(" ")
+      .filter(Boolean)
+      .map(w => w[0].toUpperCase() + w.slice(1))
+      .join(" ");
+
+    // Packages left
     const bodyText = (await scoutPage.textContent("body")) || "";
     let status = "Goal Met";
     let remaining = null;
@@ -61,13 +77,12 @@ const POST_URL =
     });
 
     await scoutPage.close();
-    // Small delay to avoid overwhelming the site
     await new Promise(r => setTimeout(r, 500));
   }
 
   await browser.close();
 
-  // Sort: selling first by remaining descending, then finished
+  // Sort selling first by remaining, then finished
   results.sort((a, b) => {
     if (a.status === "Still Selling" && b.status === "Still Selling") return b.remaining - a.remaining;
     if (a.status === "Still Selling") return -1;
