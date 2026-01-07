@@ -3,37 +3,44 @@ name: Update Cookie Tracker
 on:
   schedule:
     - cron: "0 * * * *" # every hour
-  workflow_dispatch:
+  workflow_dispatch: # manual trigger
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
 
     steps:
+      # Checkout repo with credentials so we can push back
       - uses: actions/checkout@v4
+        with:
+          persist-credentials: true
 
+      # Setup Node
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
+      # Install dependencies including Playwright
       - name: Install dependencies
         run: |
           npm install
           npx playwright install --with-deps
 
+      # Run the scraper
       - name: Run scraper
         run: node scraper/scrape.js
 
-      - name: Move data to docs
-        run: |
-          mkdir -p docs/data
-          cp data/results.json docs/data/results.json
+      # Optional: show output for debugging
+      - name: Show scraped data
+        run: cat docs/data/results.json
 
-      - name: Commit changes
+      # Commit and push only if data changed
+      - name: Commit and push changes
         run: |
-          git config user.name "cookie-tracker-bot"
-          git config user.email "bot@users.noreply.github.com"
           git add docs/data/results.json
-          git commit -m "Update cookie tracker data" || exit 0
-          git push
-
+          git diff --cached --quiet || (
+            git config user.name "cookie-tracker-bot"
+            git config user.email "bot@users.noreply.github.com"
+            git commit -m "Update cookie tracker data via GitHub Actions"
+            git push
+          )
