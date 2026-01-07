@@ -1,4 +1,4 @@
-fetch("../data/results.json")
+fetch("data/results.json")
   .then(r => r.json())
   .then(data => {
     const rows = document.getElementById("rows");
@@ -6,7 +6,7 @@ fetch("../data/results.json")
     data.sort((a, b) => {
       if (a.status !== b.status)
         return a.status === "Still Selling" ? -1 : 1;
-      return a.name.localeCompare(b.name);
+      return b.remaining - a.remaining || a.name.localeCompare(b.name);
     });
 
     for (const scout of data) {
@@ -27,4 +27,5 @@ fetch("../data/results.json")
     document.getElementById("updated").textContent =
       "Last updated: " + new Date(data[0]?.lastChecked).toLocaleString();
   });
+
 
