@@ -1,7 +1,6 @@
 import { chromium } from "playwright";
 import fs from "fs";
 
-// URL of the main post with the scouts links
 const POST_URL =
   "https://www.erininthemorning.com/p/2026-trans-girl-scouts-to-order-cookies";
 
@@ -9,10 +8,9 @@ const POST_URL =
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
-  // Go to the main page
   await page.goto(POST_URL, { waitUntil: "networkidle" });
 
-  // Find all links to Digital Cookie pages
+  // Find all Digital Cookie scout links
   const scouts = await page.$$eval("a", (links) =>
     links
       .map((a) => ({
@@ -30,7 +28,7 @@ const POST_URL =
     const scoutPage = await browser.newPage();
     await scoutPage.goto(scout.url, { waitUntil: "networkidle" });
 
-    const bodyText = await scoutPage.textContent("body") || "";
+    const bodyText = (await scoutPage.textContent("body")) || "";
 
     let status = "Goal Met";
     let remaining = null;
@@ -50,20 +48,15 @@ const POST_URL =
     });
 
     await scoutPage.close();
-
-    // Small delay to avoid overwhelming the site
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 500)); // polite delay
   }
 
   await browser.close();
 
-  // Save results directly to docs/data so GitHub Pages can serve it
+  // Save results directly to docs/data for Pages
+  const outputPath = "docs/data/results.json";
   fs.mkdirSync("docs/data", { recursive: true });
-  fs.writeFileSync(
-    "docs/data/results.json",
-    JSON.stringify(results, null, 2)
-  );
+  fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
 
-  console.log(`Scraped ${results.length} scouts. Data saved to docs/data/results.json`);
+  console.log(`Scraped ${results.length} scouts. Data saved to ${outputPath}`);
 })();
-
