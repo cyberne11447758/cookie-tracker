@@ -3,44 +3,77 @@ name: Update Cookie Tracker
 on:
   schedule:
     - cron: "0 * * * *" # every hour
-  workflow_dispatch: # manual trigger
+  workflow_dispatch:
 
 jobs:
-  scrape:
+  scrape-and-push:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repo with credentials
+      # 0️⃣ Checkout repository
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
 
-      # Setup Node.js
+      # 0️⃣ Verify GH_TOKEN is set
+      - name: Verify GH_TOKEN secret
+        run: |
+          if [ -z "${{ secrets.GH_TOKEN }}" ]; then
+            echo "❌ GH_TOKEN secret is missing or empty! Please add it to the repo secrets."
+            exit 1
+          else
+            echo "✅ GH_TOKEN secret is set."
+          fi
+        shell: bash
+
+      # 0️⃣ Configure git to use the PAT
+      - name: Configure Git remote to use PAT
+        run: |
+          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
+          git config user.name "cookie-tracker-bot"
+          git config user.email "bot@users.noreply.github.com"
+          echo "✅ Git configured to use PAT and author identity set"
+        shell: bash
+
+      # 0️⃣ Test push (dry-run)
+      - name: Test push permissions
+        run: |
+          git checkout -b auth-test-dry-run
+          git commit --allow-empty -m "Test commit for authentication"
+          git push --dry-run origin HEAD:main || {
+            echo "❌ Push test failed. Check that your PAT has 'repo' scope."
+            exit 1
+          }
+          echo "✅ Dry-run push succeeded!"
+          git checkout -
+          git branch -D auth-test-dry-run
+        shell: bash
+
+      # 1️⃣ Setup Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Install dependencies including Playwright
+      # 2️⃣ Install dependencies including Playwright
       - name: Install dependencies
         run: |
           npm install
           npx playwright install --with-deps
 
-      # Run the scraper
+      # 3️⃣ Run scraper
       - name: Run scraper
         run: node scraper/scrape.js
 
-      # Optional: show scraped data
+      # Optional: show scraped JSON
       - name: Show scraped data
         run: cat docs/data/results.json
 
-      # Commit & push changes using PAT
+      # 4️⃣ Commit & push the updated JSON
       - name: Commit and push changes
         run: |
           git add docs/data/results.json
           git diff --cached --quiet || (
-            git config user.name "cookie-tracker-bot"
-            git config user.email "bot@users.noreply.github.com"
             git commit -m "Update cookie tracker data via GitHub Actions"
-            git push https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }} HEAD:main
+            git push origin HEAD:main
           )
+        shell: bash
