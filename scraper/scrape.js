@@ -51,6 +51,9 @@ const POST_URL =
     // 4️⃣ Fallback
     if (!name) name = "Unknown Scout";
 
+    // Remove "'s Digital Cookie® Store" if present
+    name = name.replace(/'s Digital Cookie.? Store/i, "").trim();
+
     // Capitalize each word
     name = name
       .split(" ")
