@@ -1,31 +1,137 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8" />
-  <title>Cookie Sales Tracker</title>
+  <title>2026 Trans Girl Scouts To Order Cookies From!</title>
+  <meta name="description" content="This year, consider ordering your Girl Scout cookies from a trans girl scout to make their day!">
   <style>
-    body { font-family: system-ui; padding: 2rem; }
-    table { width: 100%; border-collapse: collapse; }
-    td, th { padding: 0.6rem; border-bottom: 1px solid #ddd; }
-    .met { color: green; }
-    .selling { color: crimson; }
+    /* ===== General Page Styling ===== */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f8f9fa;
+      color: #333;
+      margin: 0;
+      padding: 2rem;
+    }
+    h1 {
+      text-align: center;
+      color: #d6336c;
+      margin-bottom: 0.3rem;
+    }
+    p.description {
+      text-align: center;
+      font-size: 1.1rem;
+      margin-bottom: 2rem;
+      color: #555;
+    }
+    p.updated {
+      text-align: center;
+      font-size: 0.9rem;
+      color: #666;
+      margin-bottom: 2rem;
+    }
+    /* ===== Card Layout for Scouts ===== */
+    .scout-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .scout-card {
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      padding: 1rem 1.2rem;
+      transition: transform 0.2s, box-shadow 0.2s;
+    }
+    .scout-card:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+    .scout-name {
+      font-weight: 600;
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+    }
+    .scout-status {
+      font-weight: bold;
+      margin-bottom: 0.8rem;
+    }
+    .scout-status.selling { color: #dc3545; } /* red */
+    .scout-status.met { color: #198754; } /* green */
+    .scout-link a {
+      display: inline-block;
+      text-decoration: none;
+      background: #d6336c;
+      color: white;
+      padding: 0.4rem 0.8rem;
+      border-radius: 6px;
+      transition: background 0.2s;
+    }
+    .scout-link a:hover {
+      background: #a71d50;
+    }
+    /* ===== Footer ===== */
+    footer {
+      text-align: center;
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      color: #666;
+    }
+    footer a {
+      color: #d6336c;
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
   </style>
 </head>
 <body>
-  <h1>🏳️‍⚧️🍪 Cookie Sales Tracker</h1>
-  <p id="updated"></p>
-  <table>
-    <thead>
-      <tr>
-        <th>Scout</th>
-        <th>Status</th>
-        <th>Link</th>
-      </tr>
-    </thead>
-    <tbody id="rows"></tbody>
-  </table>
+  <h1>🏳️‍⚧️🍪 2026 Trans Girl Scouts To Order Cookies From!</h1>
+  <p class="description">
+    This year, consider ordering your Girl Scout cookies from a trans girl scout to make their day!
+  </p>
+  <p class="updated" id="updated">Loading data...</p>
 
-  <script src="app.js"></script>
+  <div class="scout-grid" id="rows"></div>
+
+  <footer>
+    Data sourced from <a href="https://www.erininthemorning.com/p/2026-trans-girl-scouts-to-order-cookies" target="_blank">Erin in the Morning</a>.<br>
+    Updates hourly, so numbers may be slightly off.
+  </footer>
+
+  <script>
+    fetch("data/results.json")
+      .then(r => r.json())
+      .then(data => {
+        const rows = document.getElementById("rows");
+
+        // Sort: Still Selling first (highest remaining first), then Goal Met
+        data.sort((a, b) => {
+          if (a.status !== b.status)
+            return a.status === "Still Selling" ? -1 : 1;
+          return (b.remaining || 0) - (a.remaining || 0);
+        });
+
+        for (const scout of data) {
+          const card = document.createElement("div");
+          card.className = "scout-card";
+
+          card.innerHTML = `
+            <div class="scout-name">${scout.name}</div>
+            <div class="scout-status ${scout.status === "Goal Met" ? "met" : "selling"}">
+              ${scout.status} ${scout.remaining ? `(${scout.remaining} left)` : ""}
+            </div>
+            <div class="scout-link"><a href="${scout.url}" target="_blank">Buy Cookies</a></div>
+          `;
+
+          rows.appendChild(card);
+        }
+
+        document.getElementById("updated").textContent =
+          "Last updated: " + new Date(data[0]?.lastChecked).toLocaleString();
+      })
+      .catch(err => console.error("Failed to load JSON:", err));
+  </script>
 </body>
 </html>
-
