@@ -1,1 +1,8 @@
-
+{
+  "name": "cookie-tracker",
+  "private": true,
+  "type": "module",
+  "dependencies": {
+    "playwright": "^1.42.0"
+  }
+}
