@@ -3,43 +3,30 @@ name: Update Cookie Tracker
 on:
   schedule:
     - cron: "0 * * * *" # every hour
-  workflow_dispatch:
+  workflow_dispatch: # manual trigger
 
 jobs:
   scrape:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout repo
+      # Checkout repo with credentials
       - uses: actions/checkout@v4
         with:
           persist-credentials: true
 
-      # Verify GH_TOKEN is set and works
-      - name: Verify GH_TOKEN
-        run: |
-          if [ -z "${{ secrets.GH_TOKEN }}" ]; then
-            echo "GH_TOKEN secret is missing or empty. Workflow cannot push!"
-            exit 1
-          fi
-          echo "GH_TOKEN is set. Testing push access..."
-          # Try a dry-run push (won't actually push)
-          git remote set-url origin https://x-access-token:${{ secrets.GH_TOKEN }}@github.com/${{ github.repository }}
-          git push --dry-run origin HEAD:main
-        shell: bash
-
-      # Setup Node
+      # Setup Node.js
       - uses: actions/setup-node@v4
         with:
           node-version: 20
 
-      # Install dependencies
+      # Install dependencies including Playwright
       - name: Install dependencies
         run: |
           npm install
           npx playwright install --with-deps
 
-      # Run scraper
+      # Run the scraper
       - name: Run scraper
         run: node scraper/scrape.js
 
@@ -47,7 +34,7 @@ jobs:
       - name: Show scraped data
         run: cat docs/data/results.json
 
-      # Commit & push updated JSON
+      # Commit & push changes using PAT
       - name: Commit and push changes
         run: |
           git add docs/data/results.json
