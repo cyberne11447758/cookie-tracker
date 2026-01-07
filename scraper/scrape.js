@@ -5,14 +5,6 @@ import fs from "fs";
 const POST_URL =
   "https://www.erininthemorning.com/p/2026-trans-girl-scouts-to-order-cookies";
 
-// Helper to capitalize names nicely
-function capitalizeName(name) {
-  return name
-    .split(" ")
-    .map(w => w[0].toUpperCase() + w.slice(1))
-    .join(" ");
-}
-
 (async () => {
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
@@ -24,25 +16,24 @@ function capitalizeName(name) {
   const scouts = await page.$$eval("a", (links) =>
     links
       .map((a) => {
-        const text = a.textContent.trim();
+        const text = a.textContent?.trim();
         const href = a.href;
 
-        // Only include links with digitalcookie
-        if (!href.includes("digitalcookie")) return null;
+        if (!href.includes("digitalcookie") || !text) return null;
 
         // Extract scout name from link text
         // Example: "Amelia Aimee's Digital Cookie® Store" => "Amelia Aimee"
         const match = text.match(/^(.+?)('|’)?s\s+Digital Cookie/i);
-        const name = match ? match[1] : text;
+        let name = match ? match[1] : text;
 
-        return {
-          name: name
-            .replace(/[^a-zA-Z\s]/g, "") // remove numbers/special chars if desired
-            .split(" ")
-            .map(w => w[0].toUpperCase() + w.slice(1))
-            .join(" "),
-          url: href,
-        };
+        // Capitalize each word safely
+        name = name
+          .split(" ")
+          .filter(Boolean) // remove empty strings
+          .map((w) => w[0].toUpperCase() + w.slice(1))
+          .join(" ");
+
+        return { name, url: href };
       })
       .filter(Boolean)
   );
