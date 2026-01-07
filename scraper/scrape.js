@@ -1,7 +1,6 @@
 import { chromium } from "playwright";
 import fs from "fs";
 
-// URL of the main post with scouts
 const POST_URL =
   "https://www.erininthemorning.com/p/2026-trans-girl-scouts-to-order-cookies";
 
@@ -12,52 +11,50 @@ const POST_URL =
   // Go to main page
   await page.goto(POST_URL, { waitUntil: "networkidle" });
 
-  // Find all Digital Cookie scout links
-  const scouts = await page.$$eval("a", (links) =>
+  // Get all Digital Cookie scout links
+  const scoutLinks = await page.$$eval("a", links =>
     links
-      .map((a) => {
-        const text = a.textContent?.trim();
-        const href = a.href;
-
-        if (!href.includes("digitalcookie") || !text) return null;
-
-        // Extract scout name from link text
-        // Example: "Amelia Aimee's Digital Cookie® Store" => "Amelia Aimee"
-        const match = text.match(/^(.+?)('|’)?s\s+Digital Cookie/i);
-        let name = match ? match[1] : text;
-
-        // Capitalize each word safely
-        name = name
-          .split(" ")
-          .filter(Boolean) // remove empty strings
-          .map((w) => w[0].toUpperCase() + w.slice(1))
-          .join(" ");
-
-        return { name, url: href };
-      })
-      .filter(Boolean)
+      .map(a => a.href)
+      .filter(href => href.includes("digitalcookie"))
   );
 
   const results = [];
 
-  for (const scout of scouts) {
+  for (const url of scoutLinks) {
     const scoutPage = await browser.newPage();
-    await scoutPage.goto(scout.url, { waitUntil: "networkidle" });
+    await scoutPage.goto(url, { waitUntil: "networkidle" });
 
+    // Get scout name from h1.title
+    let name = await scoutPage.$eval("h1.title", el => el.textContent.trim()).catch(() => null);
+
+    if (name) {
+      // Extract just the part before "'s Digital Cookie"
+      const match = name.match(/^(.+?)('|’)?s\s+Digital Cookie/i);
+      name = match ? match[1] : name;
+
+      // Capitalize each word
+      name = name
+        .split(" ")
+        .filter(Boolean)
+        .map(w => w[0].toUpperCase() + w.slice(1))
+        .join(" ");
+    } else {
+      name = "Unknown Scout";
+    }
+
+    // Get number of packages left
     const bodyText = (await scoutPage.textContent("body")) || "";
-
     let status = "Goal Met";
     let remaining = null;
-
-    const match = bodyText.match(/(\d+)\s+Packages Left To Go/i);
-    if (match) {
+    const matchPackages = bodyText.match(/(\d+)\s+Packages Left To Go/i);
+    if (matchPackages) {
       status = "Still Selling";
-      remaining = Number(match[1]);
+      remaining = Number(matchPackages[1]);
     }
 
     results.push({
-      name: scout.name,
-      url: scout.url,
+      name,
+      url,
       status,
       remaining,
       lastChecked: new Date().toISOString(),
@@ -65,25 +62,20 @@ const POST_URL =
 
     await scoutPage.close();
     // Small delay to avoid overwhelming the site
-    await new Promise((r) => setTimeout(r, 500));
+    await new Promise(r => setTimeout(r, 500));
   }
 
   await browser.close();
 
-  // Sort results: selling scouts first by remaining descending, finished scouts last
+  // Sort: selling first by remaining descending, then finished
   results.sort((a, b) => {
-    if (a.status === "Still Selling" && b.status === "Still Selling") {
-      return b.remaining - a.remaining; // most remaining first
-    } else if (a.status === "Still Selling") {
-      return -1; // a before b
-    } else if (b.status === "Still Selling") {
-      return 1; // b before a
-    } else {
-      return 0; // both finished, keep order
-    }
+    if (a.status === "Still Selling" && b.status === "Still Selling") return b.remaining - a.remaining;
+    if (a.status === "Still Selling") return -1;
+    if (b.status === "Still Selling") return 1;
+    return 0;
   });
 
-  // Save results to docs/data so GitHub Pages can serve it
+  // Save JSON
   const outputPath = "docs/data/results.json";
   fs.mkdirSync("docs/data", { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
