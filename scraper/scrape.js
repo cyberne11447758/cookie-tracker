@@ -76,3 +76,4 @@ const POST_URL =
 
   console.log(`Scraped ${results.length} scouts. Data saved to ${outputPath}`);
 })();
+
