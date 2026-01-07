@@ -1,173 +1,176 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <title>2026 Trans Girl Scouts To Order Cookies From!</title>
-  <meta name="description" content="This year, consider ordering your Girl Scout cookies from a trans girl scout to make their day!">
-  <style>
-    /* ===== General Page Styling ===== */
-    body {
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f0f2f5;
-      color: #333;
-      margin: 0;
-      padding: 0;
-    }
+<meta charset="utf-8">
+<title>2026 Trans Girl Scouts To Order Cookies From!</title>
+<meta name="description" content="This year, consider ordering your Girl Scout cookies from a trans girl scout to make their day!">
+<style>
+  body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: #f0f2f5;
+    margin: 0;
+    padding: 0;
+    color: #333;
+  }
 
-    /* ===== Hero Header ===== */
-    header {
-      background: linear-gradient(135deg, #ff7eb3, #ff758c);
-      color: white;
-      text-align: center;
-      padding: 3rem 1rem;
-      border-bottom-left-radius: 30px;
-      border-bottom-right-radius: 30px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    header h1 {
-      margin: 0;
-      font-size: 2rem;
-    }
-    header p {
-      margin-top: 0.5rem;
-      font-size: 1.2rem;
-      font-weight: 500;
-    }
+  header {
+    background: linear-gradient(135deg, #ff7eb3, #ff758c);
+    color: white;
+    text-align: center;
+    padding: 3rem 1rem;
+    border-bottom-left-radius: 30px;
+    border-bottom-right-radius: 30px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  }
 
-    /* ===== Last Updated ===== */
-    .updated {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #666;
-      margin: 1rem 0 2rem 0;
-    }
+  header h1 { margin: 0; font-size: 2rem; }
+  header p { margin-top: 0.5rem; font-size: 1.2rem; font-weight: 500; }
 
-    /* ===== Scout Grid ===== */
-    .scout-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1.5rem;
-      padding: 0 2rem;
-      margin-bottom: 3rem;
-    }
+  .updated {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    margin: 1rem 0 2rem 0;
+  }
 
-    /* ===== Scout Card ===== */
-    .scout-card {
-      background: white;
-      border-radius: 20px;
-      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
-      padding: 1.5rem 1.2rem;
-      transition: transform 0.2s, box-shadow 0.2s;
-    }
-    .scout-card:hover {
-      transform: translateY(-4px);
-      box-shadow: 0 10px 22px rgba(0,0,0,0.12);
-    }
-    .scout-name {
-      font-weight: 700;
-      font-size: 1.25rem;
-      margin-bottom: 0.5rem;
-      color: #222;
-    }
-    .scout-status {
-      font-weight: 600;
-      margin-bottom: 1rem;
-      font-size: 1rem;
-    }
-    .scout-status.selling { color: #dc3545; } /* red */
-    .scout-status.met { color: #198754; } /* green */
-    .scout-link a {
-      display: inline-block;
-      text-decoration: none;
-      background: #d6336c;
-      color: white;
-      font-weight: 600;
-      padding: 0.5rem 1rem;
-      border-radius: 10px;
-      transition: background 0.2s, transform 0.2s;
-    }
-    .scout-link a:hover {
-      background: #a71d50;
-      transform: translateY(-2px);
-    }
+  /* ===== Bubble Grid ===== */
+  .scout-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1.5rem;
+    padding: 0 2rem;
+    margin-bottom: 3rem;
+  }
 
-    /* ===== Footer ===== */
-    footer {
-      text-align: center;
-      font-size: 0.9rem;
-      color: #666;
-      padding: 2rem 1rem;
-      border-top: 1px solid #ddd;
-      background: #fafafa;
-    }
-    footer a {
-      color: #d6336c;
-      text-decoration: none;
-      font-weight: 500;
-    }
-    footer a:hover {
-      text-decoration: underline;
-    }
+  .scout-bubble {
+    position: relative;
+    border-radius: 50%;
+    width: 180px;
+    height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 700;
+    text-align: center;
+    padding: 1rem;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .scout-bubble:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 10px 22px rgba(0,0,0,0.12);
+  }
 
-    /* ===== Responsive Padding ===== */
-    @media(max-width: 500px){
-      header {
-        padding: 2rem 1rem;
-      }
-      .scout-grid {
-        padding: 0 1rem;
-      }
-    }
-  </style>
+  .bubble-name { font-size: 1rem; margin-bottom: 0.5rem; }
+  .bubble-status { font-size: 0.9rem; font-weight: 600; }
+  .bubble-link {
+    margin-top: 0.5rem;
+    display: inline-block;
+    text-decoration: none;
+    color: white;
+    background: rgba(0,0,0,0.2);
+    padding: 0.3rem 0.6rem;
+    border-radius: 8px;
+    font-weight: 600;
+    transition: background 0.2s, transform 0.2s;
+  }
+  .bubble-link:hover { background: rgba(0,0,0,0.35); transform: translateY(-1px); }
+
+  /* Goal Met Overlay */
+  .goal-met {
+    filter: grayscale(50%);
+    opacity: 0.8;
+  }
+  .goal-met .bubble-link { 
+    text-decoration: line-through;
+    opacity: 0.5;
+    pointer-events: auto; /* still clickable but visually de-emphasized */
+  }
+
+  footer {
+    text-align: center;
+    font-size: 0.9rem;
+    color: #666;
+    padding: 2rem 1rem;
+    border-top: 1px solid #ddd;
+    background: #fafafa;
+  }
+  footer a { color: #d6336c; text-decoration: none; font-weight: 500; }
+  footer a:hover { text-decoration: underline; }
+
+  @media(max-width: 500px){
+    header { padding: 2rem 1rem; }
+    .scout-grid { padding: 0 1rem; }
+    .scout-bubble { width: 140px; height: 140px; }
+  }
+</style>
 </head>
 <body>
 
-  <header>
-    <h1>🏳️‍⚧️🍪 2026 Trans Girl Scouts To Order Cookies From!</h1>
-    <p>This year, consider ordering your Girl Scout cookies from a trans girl scout to make their day!</p>
-  </header>
+<header>
+  <h1>🏳️‍⚧️🍪 2026 Trans Girl Scouts To Order Cookies From!</h1>
+  <p>This year, consider ordering your Girl Scout cookies from a trans girl scout to make their day!</p>
+</header>
 
-  <p class="updated" id="updated">Loading data...</p>
+<p class="updated" id="updated">Loading data...</p>
 
-  <div class="scout-grid" id="rows"></div>
+<div class="scout-grid" id="rows"></div>
 
-  <footer>
-    Data sourced from <a href="https://www.erininthemorning.com/p/2026-trans-girl-scouts-to-order-cookies" target="_blank">Erin in the Morning</a>.<br>
-    Updates hourly, so numbers may be slightly off.
-  </footer>
+<footer>
+  Data sourced from <a href="https://www.erininthemorning.com/p/2026-trans-girl-scouts-to-order-cookies" target="_blank">Erin in the Morning</a>.<br>
+  Updates hourly, so numbers may be slightly off.
+</footer>
 
-  <script>
-    fetch("data/results.json")
-      .then(r => r.json())
-      .then(data => {
-        const rows = document.getElementById("rows");
+<script>
+fetch("data/results.json")
+  .then(r => r.json())
+  .then(data => {
+    const rows = document.getElementById("rows");
 
-        // Sort: Still Selling first (highest remaining first), then Goal Met
-        data.sort((a, b) => {
-          if (a.status !== b.status)
-            return a.status === "Still Selling" ? -1 : 1;
-          return (b.remaining || 0) - (a.remaining || 0);
-        });
+    // Find highest remaining for gradient scaling
+    const maxRemaining = Math.max(...data.map(d => d.remaining || 0));
 
-        for (const scout of data) {
-          const card = document.createElement("div");
-          card.className = "scout-card";
+    // Sort: Still Selling first (highest remaining first), then Goal Met
+    data.sort((a, b) => {
+      if (a.status !== b.status)
+        return a.status === "Still Selling" ? -1 : 1;
+      return (b.remaining || 0) - (a.remaining || 0);
+    });
 
-          card.innerHTML = `
-            <div class="scout-name">${scout.name}</div>
-            <div class="scout-status ${scout.status === "Goal Met" ? "met" : "selling"}">
-              ${scout.status} ${scout.remaining ? `(${scout.remaining} left)` : ""}
-            </div>
-            <div class="scout-link"><a href="${scout.url}" target="_blank">Buy Cookies</a></div>
-          `;
+    for (const scout of data) {
+      const bubble = document.createElement("div");
+      bubble.className = "scout-bubble";
 
-          rows.appendChild(card);
-        }
+      // Set gradient or solid green
+      if (scout.status === "Goal Met") {
+        bubble.style.background = "#198754"; // solid green
+        bubble.classList.add("goal-met");
+      } else {
+        // Gradient: red -> yellow -> green based on remaining
+        const ratio = (scout.remaining || 0) / (maxRemaining || 1);
+        // Convert ratio to color (red = most cookies left, yellow middle, green = low)
+        const red = Math.floor(220 * ratio + 35*(1-ratio)); // more remaining → redder
+        const green = Math.floor(120 * (1 - ratio) + 50*ratio); // less remaining → greener
+        const blue = 50;
+        bubble.style.background = `rgb(${red}, ${green}, ${blue})`;
+      }
 
-        document.getElementById("updated").textContent =
-          "Last updated: " + new Date(data[0]?.lastChecked).toLocaleString();
-      })
-      .catch(err => console.error("Failed to load JSON:", err));
-  </script>
+      bubble.innerHTML = `
+        <div class="bubble-name">${scout.name}</div>
+        <div class="bubble-status">${scout.status} ${scout.remaining ? `(${scout.remaining} left)` : ""}</div>
+        <a class="bubble-link" href="${scout.url}" target="_blank">Buy Cookies</a>
+      `;
+
+      rows.appendChild(bubble);
+    }
+
+    document.getElementById("updated").textContent =
+      "Last updated: " + new Date(data[0]?.lastChecked).toLocaleString();
+  })
+  .catch(err => console.error("Failed to load JSON:", err));
+</script>
+
 </body>
 </html>
