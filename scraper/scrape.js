@@ -1,6 +1,7 @@
 import { chromium } from "playwright";
 import fs from "fs";
 
+// URL of the main post with scouts
 const POST_URL =
   "https://www.erininthemorning.com/p/2026-trans-girl-scouts-to-order-cookies";
 
@@ -8,6 +9,7 @@ const POST_URL =
   const browser = await chromium.launch({ headless: true });
   const page = await browser.newPage();
 
+  // Go to main page
   await page.goto(POST_URL, { waitUntil: "networkidle" });
 
   // Find all Digital Cookie scout links
@@ -48,12 +50,26 @@ const POST_URL =
     });
 
     await scoutPage.close();
-    await new Promise((r) => setTimeout(r, 500)); // polite delay
+    // Small delay to avoid overwhelming the site
+    await new Promise((r) => setTimeout(r, 500));
   }
 
   await browser.close();
 
-  // Save results directly to docs/data for Pages
+  // Sort results: selling scouts first by remaining descending, finished scouts last
+  results.sort((a, b) => {
+    if (a.status === "Still Selling" && b.status === "Still Selling") {
+      return b.remaining - a.remaining; // most remaining first
+    } else if (a.status === "Still Selling") {
+      return -1; // a before b
+    } else if (b.status === "Still Selling") {
+      return 1; // b before a
+    } else {
+      return 0; // both finished, keep order
+    }
+  });
+
+  // Save results to docs/data so GitHub Pages can serve it
   const outputPath = "docs/data/results.json";
   fs.mkdirSync("docs/data", { recursive: true });
   fs.writeFileSync(outputPath, JSON.stringify(results, null, 2));
