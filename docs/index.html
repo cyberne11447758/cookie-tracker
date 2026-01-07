@@ -8,53 +8,71 @@
     /* ===== General Page Styling ===== */
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: #f8f9fa;
+      background: #f0f2f5;
       color: #333;
       margin: 0;
-      padding: 2rem;
+      padding: 0;
     }
-    h1 {
+
+    /* ===== Hero Header ===== */
+    header {
+      background: linear-gradient(135deg, #ff7eb3, #ff758c);
+      color: white;
       text-align: center;
-      color: #d6336c;
-      margin-bottom: 0.3rem;
+      padding: 3rem 1rem;
+      border-bottom-left-radius: 30px;
+      border-bottom-right-radius: 30px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     }
-    p.description {
-      text-align: center;
-      font-size: 1.1rem;
-      margin-bottom: 2rem;
-      color: #555;
+    header h1 {
+      margin: 0;
+      font-size: 2rem;
     }
-    p.updated {
+    header p {
+      margin-top: 0.5rem;
+      font-size: 1.2rem;
+      font-weight: 500;
+    }
+
+    /* ===== Last Updated ===== */
+    .updated {
       text-align: center;
       font-size: 0.9rem;
       color: #666;
-      margin-bottom: 2rem;
+      margin: 1rem 0 2rem 0;
     }
-    /* ===== Card Layout for Scouts ===== */
+
+    /* ===== Scout Grid ===== */
     .scout-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-      gap: 1rem;
+      gap: 1.5rem;
+      padding: 0 2rem;
+      margin-bottom: 3rem;
     }
+
+    /* ===== Scout Card ===== */
     .scout-card {
       background: white;
-      border-radius: 12px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-      padding: 1rem 1.2rem;
+      border-radius: 20px;
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      padding: 1.5rem 1.2rem;
       transition: transform 0.2s, box-shadow 0.2s;
     }
     .scout-card:hover {
-      transform: translateY(-3px);
-      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+      transform: translateY(-4px);
+      box-shadow: 0 10px 22px rgba(0,0,0,0.12);
     }
     .scout-name {
-      font-weight: 600;
-      font-size: 1.2rem;
+      font-weight: 700;
+      font-size: 1.25rem;
       margin-bottom: 0.5rem;
+      color: #222;
     }
     .scout-status {
-      font-weight: bold;
-      margin-bottom: 0.8rem;
+      font-weight: 600;
+      margin-bottom: 1rem;
+      font-size: 1rem;
     }
     .scout-status.selling { color: #dc3545; } /* red */
     .scout-status.met { color: #198754; } /* green */
@@ -63,34 +81,52 @@
       text-decoration: none;
       background: #d6336c;
       color: white;
-      padding: 0.4rem 0.8rem;
-      border-radius: 6px;
-      transition: background 0.2s;
+      font-weight: 600;
+      padding: 0.5rem 1rem;
+      border-radius: 10px;
+      transition: background 0.2s, transform 0.2s;
     }
     .scout-link a:hover {
       background: #a71d50;
+      transform: translateY(-2px);
     }
+
     /* ===== Footer ===== */
     footer {
       text-align: center;
-      margin-top: 3rem;
       font-size: 0.9rem;
       color: #666;
+      padding: 2rem 1rem;
+      border-top: 1px solid #ddd;
+      background: #fafafa;
     }
     footer a {
       color: #d6336c;
       text-decoration: none;
+      font-weight: 500;
     }
     footer a:hover {
       text-decoration: underline;
     }
+
+    /* ===== Responsive Padding ===== */
+    @media(max-width: 500px){
+      header {
+        padding: 2rem 1rem;
+      }
+      .scout-grid {
+        padding: 0 1rem;
+      }
+    }
   </style>
 </head>
 <body>
-  <h1>🏳️‍⚧️🍪 2026 Trans Girl Scouts To Order Cookies From!</h1>
-  <p class="description">
-    This year, consider ordering your Girl Scout cookies from a trans girl scout to make their day!
-  </p>
+
+  <header>
+    <h1>🏳️‍⚧️🍪 2026 Trans Girl Scouts To Order Cookies From!</h1>
+    <p>This year, consider ordering your Girl Scout cookies from a trans girl scout to make their day!</p>
+  </header>
+
   <p class="updated" id="updated">Loading data...</p>
 
   <div class="scout-grid" id="rows"></div>
